@@ -1,0 +1,18 @@
+# Never commit credentials
+setup/.env
+
+# Generated SQL files (re-create with scripts/generate_iceberg_data.py)
+seed_data/01_vehicle_telemetry.sql
+seed_data/02_conveyor_belt_telemetry.sql
+seed_data/03_crusher_telemetry.sql
+seed_data/04_dig_face_operations.sql
+seed_data/05_stockpile_volumes.sql
+seed_data/06_product_movement.sql
+seed_data/07_shift_instances.sql
+seed_data/08_operator_shift_assignments.sql
+seed_data/09_maintenance_records.sql
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
