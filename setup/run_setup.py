@@ -39,8 +39,9 @@ load_dotenv(HERE / ".env")
 # ---------------------------------------------------------------------------
 # Database name substitution — read from .env so any db name works
 # ---------------------------------------------------------------------------
-DB_NAME        = os.environ.get("SNOWFLAKE_DATABASE",         "MINING_DB")
+DB_NAME         = os.environ.get("SNOWFLAKE_DATABASE",         "MINING_DB")
 ICEBERG_DB_NAME = os.environ.get("SNOWFLAKE_ICEBERG_DATABASE", "MINING_ICEBERG")
+EXT_VOL_NAME    = os.environ.get("SNOWFLAKE_EXTERNAL_VOLUME",  "ONELAKE_ICEBERG_VOL")
 
 _authenticator = os.environ.get("SNOWFLAKE_AUTHENTICATOR", "externalbrowser").lower()
 
@@ -158,8 +159,9 @@ def split_statements(sql: str) -> list[str]:
 def _substitute_db_names(sql: str) -> str:
     """Replace hardcoded DB names with values from .env."""
     # Replace MINING_ICEBERG before MINING_DB to avoid partial match
-    sql = sql.replace("MINING_ICEBERG", ICEBERG_DB_NAME)
-    sql = sql.replace("MINING_DB",      DB_NAME)
+    sql = sql.replace("MINING_ICEBERG",    ICEBERG_DB_NAME)
+    sql = sql.replace("MINING_DB",         DB_NAME)
+    sql = sql.replace("ONELAKE_ICEBERG_VOL", EXT_VOL_NAME)
     return sql
 
 
