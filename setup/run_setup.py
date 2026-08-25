@@ -226,15 +226,17 @@ def run_roster_inline(cur) -> int:
         nonlocal executed
         cur.execute(f"USE DATABASE {DB_NAME}")
         cur.execute(f"USE SCHEMA {schema}")
-        stmts = [s.strip() for s in sql_text.split(";") if s.strip()]
+        # Split on ";\n" to handle batched multi-INSERT output from generator
+        stmts = [s.strip() for s in sql_text.split(";\n") if s.strip()]
+        batch_num = 0
         for stmt in stmts:
-            preview = stmt[:80].replace("\n", " ")
+            batch_num += 1
             try:
                 cur.execute(stmt)
-                print(f"    [  +] ✓  {label}: {cur.rowcount} rows")
+                print(f"    [  +] ✓  {label} batch {batch_num}: {cur.rowcount} rows inserted")
                 executed += 1
             except Exception as e:
-                print(f"    [  !] ✗  {label}: {e}")
+                print(f"    [  !] ✗  {label} batch {batch_num}: {e}")
                 raise
 
     _exec_sql(shift_sql,  "OPS_REF",  "SHIFT_INSTANCES")
